@@ -5,6 +5,6 @@
   "requirements": ["uptime_kuma_monitor==1.0.0"],
   "codeowners": ["@meichthys"],
   "iot_class": "cloud_polling",
+  "version": "0.01c",  
   "config_flow": true
-  "version": "0.01c",
 }
