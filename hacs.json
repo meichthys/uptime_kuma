@@ -1,5 +1,5 @@
 {
-  "name": "uptime kuma custom component",
+  "name": "Uptime Kuma",
   "domains": [
     "binary_sensor",
   ],
