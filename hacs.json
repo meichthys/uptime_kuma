@@ -1,8 +1,7 @@
 {
   "name": "uptime kuma custom component",
   "domains": [
-    "sensor",
-    "binary_sensor"
+    "binary_sensor",
   ],
   "render_readme": true,
   "hide_default_branch": true,
