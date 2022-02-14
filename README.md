@@ -1,2 +1,2 @@
 # uptime_kuma
-uptime_kuma HACS
+uptime_kuma HACS integration
