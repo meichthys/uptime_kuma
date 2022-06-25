@@ -2,8 +2,8 @@
   "domain": "uptime_kuma",
   "name": "Uptime Kuma",
   "requirements": ["uptime_kuma_monitor==1.0.0"],
-  "codeowners": ["@meichthys"],
+  "codeowners": ["@meichthys", "@jayakornk"],
   "iot_class": "cloud_polling",
-  "version": "1.0.0", 
+  "version": "1.0.0",
   "config_flow": true
 }

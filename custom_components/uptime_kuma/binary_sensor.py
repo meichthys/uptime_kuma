@@ -35,20 +35,32 @@ class UptimeKumaBinarySensor(BinarySensorEntity, CoordinatorEntity):
         super().__init__(coordinator)
 
         self._attr_name = monitor
-        self._attr_monitor_status = self.coordinator.data[self.name]["monitor_status"] == 1.0
-        self._attr_monitor_response_time = self.coordinator.data[self.name][
-            "monitor_response_time"
-        ]
-        if "monitor_cert_days_remaining" in self.coordinator.data[self.name]:
-            self._attr_monitor_cert_days_remaining = self.coordinator.data[self.name][
+        self._attr_extra_state_attributes = {
+            "monitor_status": bool(
+                self.coordinator.data[self.name]["monitor_status"] == 1.0
+            ),
+            "monitor_response_time": self.coordinator.data[self.name][
+                "monitor_response_time"
+            ],
+            "monitor_cert_days_remaining": self.coordinator.data[self.name][
                 "monitor_cert_days_remaining"
             ]
-        if "monitor_cert_is_valid" in self.coordinator.data[self.name]:
-            self._attr_monitor_cert_is_valid = self.coordinator.data[self.name][
-                "monitor_cert_is_valid"
-            ] == 1.0
+            or None,
+            "monitor_cert_is_valid": bool(
+                self.coordinator.data[self.name]["monitor_cert_is_valid"] == 1.0
+            )
+            or None,
+        }
+        # if "monitor_cert_days_remaining" in self.coordinator.data[self.name]:
+        #     self._attr_extra_state_attributes[
+        #         "monitor_cert_days_remaining"
+        #     ] = self.coordinator.data[self.name]["monitor_cert_days_remaining"]
+        # if "monitor_cert_is_valid" in self.coordinator.data[self.name]:
+        #     self._attr_extra_state_attributes["monitor_cert_is_valid"] = (
+        #         self.coordinator.data[self.name]["monitor_cert_is_valid"] == 1.0
+        #     )
 
     @property
     def is_on(self) -> Boolean:
         """Return true if the binary sensor is on."""
-        return self.coordinator.data[self.name]["monitor_status"] == 1.0
+        return bool(self.coordinator.data[self.name]["monitor_status"] == 1.0)
