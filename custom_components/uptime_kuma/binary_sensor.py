@@ -42,23 +42,19 @@ class UptimeKumaBinarySensor(BinarySensorEntity, CoordinatorEntity):
             "monitor_response_time": self.coordinator.data[self.name][
                 "monitor_response_time"
             ],
-            "monitor_cert_days_remaining": self.coordinator.data[self.name][
+        }
+        if "monitor_cert_days_remaining" in self.coordinator.data[self.name]:
+            self._attr_extra_state_attributes[
                 "monitor_cert_days_remaining"
-            ]
-            or None,
-            "monitor_cert_is_valid": bool(
+            ] = self.coordinator.data[self.name]["monitor_cert_days_remaining"]
+        else:
+            self._attr_extra_state_attributes["monitor_cert_days_remaining"] = "-"
+        if "monitor_cert_is_valid" in self.coordinator.data[self.name]:
+            self._attr_extra_state_attributes["monitor_cert_is_valid"] = (
                 self.coordinator.data[self.name]["monitor_cert_is_valid"] == 1.0
             )
-            or None,
-        }
-        # if "monitor_cert_days_remaining" in self.coordinator.data[self.name]:
-        #     self._attr_extra_state_attributes[
-        #         "monitor_cert_days_remaining"
-        #     ] = self.coordinator.data[self.name]["monitor_cert_days_remaining"]
-        # if "monitor_cert_is_valid" in self.coordinator.data[self.name]:
-        #     self._attr_extra_state_attributes["monitor_cert_is_valid"] = (
-        #         self.coordinator.data[self.name]["monitor_cert_is_valid"] == 1.0
-        #     )
+        else:
+            self._attr_extra_state_attributes["monitor_cert_is_valid"] = "-"
 
     @property
     def is_on(self) -> Boolean:
