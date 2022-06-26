@@ -1,62 +1,45 @@
-"""Summary binary data from Uptime Kuma."""
-from voluptuous.validators import Boolean
+"""UptimeKuma binary_sensor platform."""
+from __future__ import annotations
 
-from homeassistant.components.binary_sensor import BinarySensorEntity
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
+)
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import (
-    CoordinatorEntity,
-    DataUpdateCoordinator,
-)
 
+from . import UptimeKumaDataUpdateCoordinator
 from .const import DOMAIN
+from .entity import UptimeKumaEntity
 
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    config_entry: ConfigEntry,
+    entry: ConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Defer sensor setup to the shared sensor module."""
-    coordinator = hass.data[DOMAIN]
+    """Set up the UptimeKuma binary_sensors."""
+    coordinator: UptimeKumaDataUpdateCoordinator = hass.data[DOMAIN][entry.entry_id]
     async_add_entities(
-        UptimeKumaBinarySensor(coordinator, monitor) for monitor in coordinator.data
+        UptimeKumaBinarySensor(
+            coordinator,
+            BinarySensorEntityDescription(
+                key=str(monitor.monitor_name),
+                name=monitor.monitor_name,
+                device_class=BinarySensorDeviceClass.CONNECTIVITY,
+            ),
+            monitor=monitor,
+        )
+        for monitor in coordinator.data
     )
 
 
-class UptimeKumaBinarySensor(BinarySensorEntity, CoordinatorEntity):
-    """Represents an Uptime Kuma binary sensor."""
-
-    _attr_icon = "mdi:cloud"
-
-    def __init__(self, coordinator: DataUpdateCoordinator, monitor: str) -> None:
-        """Initialize the Uptime Kuma binary sensor."""
-        super().__init__(coordinator)
-
-        self._attr_name = monitor
-        self._attr_extra_state_attributes = {
-            "monitor_status": bool(
-                self.coordinator.data[self.name]["monitor_status"] == 1.0
-            ),
-            "monitor_response_time": self.coordinator.data[self.name][
-                "monitor_response_time"
-            ],
-        }
-        if "monitor_cert_days_remaining" in self.coordinator.data[self.name]:
-            self._attr_extra_state_attributes[
-                "monitor_cert_days_remaining"
-            ] = self.coordinator.data[self.name]["monitor_cert_days_remaining"]
-        else:
-            self._attr_extra_state_attributes["monitor_cert_days_remaining"] = "-"
-        if "monitor_cert_is_valid" in self.coordinator.data[self.name]:
-            self._attr_extra_state_attributes["monitor_cert_is_valid"] = (
-                self.coordinator.data[self.name]["monitor_cert_is_valid"] == 1.0
-            )
-        else:
-            self._attr_extra_state_attributes["monitor_cert_is_valid"] = "-"
+class UptimeKumaBinarySensor(UptimeKumaEntity, BinarySensorEntity):
+    """Representation of a UptimeKuma binary sensor."""
 
     @property
-    def is_on(self) -> Boolean:
-        """Return true if the binary sensor is on."""
-        return bool(self.coordinator.data[self.name]["monitor_status"] == 1.0)
+    def is_on(self) -> bool:
+        """Return True if the entity is on."""
+        return self.monitor_available

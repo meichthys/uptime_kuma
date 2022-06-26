@@ -7,7 +7,3 @@ This integration is temporary and is expected to soon be merged into HomeAssista
 Install using HACS and setup like any other integration via the UI. Enter the uptime kuma instane url and credentials.
 
 The URL needs to be the full url with HTTP://HOST:PORT or HTTPS://HOST
-
-## Issues
-
-Note: Currently, the instance doesn't list the entities on the integrations page, but they should exist under developer tools using the endity id of: `binary_sensor.<uptimekuma monitor name>`. 
