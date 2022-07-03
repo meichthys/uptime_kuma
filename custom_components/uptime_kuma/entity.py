@@ -30,7 +30,7 @@ class UptimeKumaEntity(CoordinatorEntity[UptimeKumaDataUpdateCoordinator]):
         self._attr_device_info = DeviceInfo(
             identifiers={(DOMAIN, str(self.monitor.monitor_name))},
             name=self.monitor.monitor_name,
-            manufacturer="JayakornK",
+            manufacturer="Uptime Kuma Integration",
             entry_type=DeviceEntryType.SERVICE,
             model=self.monitor.monitor_type,
         )
