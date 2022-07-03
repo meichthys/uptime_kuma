@@ -8,11 +8,14 @@ from homeassistant.components.binary_sensor import (
 )
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity import EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from pyuptimekuma import UptimeKumaMonitor
 
 from . import UptimeKumaDataUpdateCoordinator
 from .const import DOMAIN
 from .entity import UptimeKumaEntity
+from .utils import format_entity_name
 
 
 async def async_setup_entry(
@@ -38,6 +41,18 @@ async def async_setup_entry(
 
 class UptimeKumaBinarySensor(UptimeKumaEntity, BinarySensorEntity):
     """Representation of a UptimeKuma binary sensor."""
+
+    def __init__(
+        self,
+        coordinator: UptimeKumaDataUpdateCoordinator,
+        description: EntityDescription,
+        monitor: UptimeKumaMonitor,
+    ) -> None:
+        """Set entity ID."""
+        super().__init__(coordinator, description, monitor)
+        self.entity_id = (
+            f"binary_sensor.uptimekuma_{format_entity_name(self.monitor.monitor_name)}"
+        )
 
     @property
     def is_on(self) -> bool:

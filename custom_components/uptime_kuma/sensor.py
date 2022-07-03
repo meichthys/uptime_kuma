@@ -6,12 +6,14 @@ from typing import TypedDict
 from homeassistant.components.sensor import SensorEntity, SensorEntityDescription
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity import EntityCategory
+from homeassistant.helpers.entity import EntityCategory, EntityDescription
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from pyuptimekuma import UptimeKumaMonitor
 
 from . import UptimeKumaDataUpdateCoordinator
 from .const import DOMAIN
 from .entity import UptimeKumaEntity
+from .utils import format_entity_name
 
 
 class StatusValue(TypedDict):
@@ -51,6 +53,18 @@ async def async_setup_entry(
 
 class UptimeKumaSensor(UptimeKumaEntity, SensorEntity):
     """Representation of a UptimeKuma sensor."""
+
+    def __init__(
+        self,
+        coordinator: UptimeKumaDataUpdateCoordinator,
+        description: EntityDescription,
+        monitor: UptimeKumaMonitor,
+    ) -> None:
+        """Set entity ID."""
+        super().__init__(coordinator, description, monitor)
+        self.entity_id = (
+            f"sensor.uptimekuma_{format_entity_name(self.monitor.monitor_name)}"
+        )
 
     @property
     def native_value(self) -> str:

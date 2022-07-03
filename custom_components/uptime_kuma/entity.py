@@ -1,11 +1,10 @@
 """Base Uptime Kuma entity."""
 from __future__ import annotations
 
-from pyuptimekuma import UptimeKumaMonitor
-
 from homeassistant.helpers.device_registry import DeviceEntryType
 from homeassistant.helpers.entity import DeviceInfo, EntityDescription
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
+from pyuptimekuma import UptimeKumaMonitor
 
 from . import UptimeKumaDataUpdateCoordinator
 from .const import ATTRIBUTION, DOMAIN
@@ -46,7 +45,7 @@ class UptimeKumaEntity(CoordinatorEntity[UptimeKumaDataUpdateCoordinator]):
             "monitor_type": self.monitor.monitor_type,
             "monitor_url": self.monitor.monitor_url,
         }
-        self._attr_unique_id = str(self.monitor.monitor_name)
+        self._attr_unique_id = f"uptimekuma_{self.monitor.monitor_name}"
         self.api = coordinator.api
 
     @property
