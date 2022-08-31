@@ -6,4 +6,4 @@ This integration is temporary and is expected to soon be merged into HomeAssista
 
 Install using HACS and setup like any other integration via the UI. Enter the uptime kuma instane url and credentials.
 
-The URL needs to be the full url with HTTP://HOST:PORT or HTTPS://HOST
+The URL needs to be the full url with HTTP://HOST
