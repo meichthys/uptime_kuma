@@ -1,9 +1,5 @@
 {
   "name": "Uptime Kuma",
-  "domains": [
-    "binary_sensor",
-    "sensor"
-  ],
   "render_readme": true,
   "hide_default_branch": true,
   "iot_class": "Cloud Polling",
