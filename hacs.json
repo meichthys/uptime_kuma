@@ -2,6 +2,5 @@
   "name": "Uptime Kuma",
   "render_readme": true,
   "hide_default_branch": true,
-  "iot_class": "Cloud Polling",
   "homeassistant": "2021.12.0"
 }
