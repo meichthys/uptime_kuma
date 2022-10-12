@@ -6,6 +6,6 @@ This integration is temporary and is expected to soon be merged into HomeAssista
 
 ## Usage
 
-Install using HACS and setup like any other integration via the UI. Enter the uptime kuma instane url and credentials.
+Install using HACS and setup like any other integration via the UI. Enter the uptime kuma instance url and credentials.
 
 The URL needs to be the full url with HTTP://HOST
