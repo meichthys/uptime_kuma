@@ -1,6 +1,6 @@
 # Uptime Kuma HACS integration
 
-This integration is temporary and is expected to soon be merged into HomeAssistant Core, but until then it will be available via HACS (add this repository url as a HACS custom repository if you don't see this integration in the default HACS integration library).
+This integration should be available in the HACS store. If you don't see it there, add this repository url as a HACS custom repository.
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/meichthys/uptime_kuma)
 
