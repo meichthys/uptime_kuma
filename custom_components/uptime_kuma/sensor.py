@@ -50,6 +50,17 @@ async def async_setup_entry(
         )
         for monitor in coordinator.data
     )
+    async_add_entities(
+        [UptimeKumaSummarySensor(
+            coordinator,
+            SensorEntityDescription(
+                key="system_summary",
+                name="system_summary",
+                entity_category=EntityCategory.DIAGNOSTIC,
+                device_class="uptimekuma__monitor_status",
+            )
+        )]
+    )
 
 
 class UptimeKumaSensor(UptimeKumaEntity, SensorEntity):
@@ -76,3 +87,35 @@ class UptimeKumaSensor(UptimeKumaEntity, SensorEntity):
     def icon(self) -> str:
         """Return the status of the monitor."""
         return SENSORS_INFO[self.monitor.monitor_status]["icon"]
+
+
+class UptimeKumaSummarySensor(SensorEntity):
+    """Representation of a UptimeKuma sensor."""
+
+    def __init__(
+        self,
+        coordinator: UptimeKumaDataUpdateCoordinator,
+        description: EntityDescription
+    ) -> None:
+        """Set entity ID."""
+        super().__init__()
+        self.description=description
+        self.coordinator=coordinator
+        self.ukstate=0.0
+        self.entity_id = (
+            f"sensor.uptimekuma_{format_entity_name(self.description.name)}"
+        )
+
+    @property
+    def native_value(self) -> str:
+        """Return the status of the monitor."""
+        self.ukstate=1.0
+        for m in self.coordinator.data:
+            if m.monitor_status == 0.0:
+                self.ukstate=0.0
+        return SENSORS_INFO[self.ukstate]["value"]
+
+    @property
+    def icon(self) -> str:
+        """Return the status of the monitor."""
+        return SENSORS_INFO[self.ukstate]["icon"]
