@@ -22,6 +22,10 @@ class StatusValue(TypedDict):
     value: str
     icon: str
 
+SYSTEM_INFO = {
+    0.0: StatusValue(value="degraded", icon="mdi:television-off"),
+    1.0: StatusValue(value="up", icon="mdi:television-shimmer"),
+}
 
 SENSORS_INFO = {
     0.0: StatusValue(value="down", icon="mdi:television-off"),
@@ -113,9 +117,9 @@ class UptimeKumaSummarySensor(SensorEntity):
         for m in self.coordinator.data:
             if m.monitor_status == 0.0:
                 self.ukstate=0.0
-        return SENSORS_INFO[self.ukstate]["value"]
+        return SYSTEM_INFO[self.ukstate]["value"]
 
     @property
     def icon(self) -> str:
         """Return the status of the monitor."""
-        return SENSORS_INFO[self.ukstate]["icon"]
+        return SYSTEM_INFO[self.ukstate]["icon"]
