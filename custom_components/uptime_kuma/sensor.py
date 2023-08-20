@@ -120,6 +120,9 @@ class UptimeKumaSummarySensor(SensorEntity):
         }
 
     def determine_status(self):
+        self.downs=0
+        self.ups=0
+        self.pendings=0
         for m in self.coordinator.data:
             if m.monitor_status == 0.0:
                 self.downs+=1
