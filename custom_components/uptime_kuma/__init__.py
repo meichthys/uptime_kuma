@@ -21,7 +21,7 @@ from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
-from .const import COORDINATOR_UPDATE_INTERVAL, DOMAIN, LOGGER, PLATFORMS
+from .const import COORDINATOR_UPDATE_INTERVAL, DOMAIN, LOGGER, PLATFORMS, ERROR_CACHE_SIZE
 
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
@@ -83,18 +83,36 @@ class UptimeKumaDataUpdateCoordinator(DataUpdateCoordinator):
             update_interval=COORDINATOR_UPDATE_INTERVAL,
         )
         self._config_entry_id = config_entry_id
+        self.error_cache_size = ERROR_CACHE_SIZE
         self._device_registry = dev_reg
         self.api = api
+        self.cache = None
+        self.fail_counter = 0
 
     async def _async_update_data(self) -> dict | None:
         """Update data."""
         try:
             response = await self.api.async_get_monitors()
         except UptimeKumaConnectionException as exception:
-            raise UpdateFailed(exception) from exception
+            if self.cache != None:
+                self.fail_counter+=1
+                if self.fail_counter>self.error_cache_size:
+                    raise UpdateFailed(exception) from exception
+                else:
+                    return self.cache
+            else:
+                raise UpdateFailed(exception) from exception
         except UptimeKumaException as exception:
-            raise UpdateFailed(exception) from exception
+            if self.cache != None:
+                self.fail_counter+=1
+                if self.fail_counter>self.error_cache_size:
+                    raise UpdateFailed(exception) from exception
+                else:
+                    return self.cache
+            else:
+                raise UpdateFailed(exception) from exception
 
+        self.fail_counter = 0        
         monitors: list[UptimeKumaMonitor] = response.data
 
         current_monitors = {
@@ -121,5 +139,6 @@ class UptimeKumaDataUpdateCoordinator(DataUpdateCoordinator):
             )
             return None
 
+        self.cache = monitors
         return monitors
         # return await super()._async_update_data()

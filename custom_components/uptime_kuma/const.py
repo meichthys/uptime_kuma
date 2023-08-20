@@ -14,6 +14,7 @@ COORDINATOR_UPDATE_INTERVAL: timedelta = timedelta(seconds=10)
 
 DOMAIN = "uptime_kuma"
 PLATFORMS: Final = [Platform.BINARY_SENSOR, Platform.SENSOR]
+ERROR_CACHE_SIZE = 1
 
 ATTRIBUTION: Final = "Data provided by Uptime Kuma"
 
