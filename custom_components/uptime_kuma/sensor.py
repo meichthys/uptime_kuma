@@ -13,7 +13,7 @@ from pyuptimekuma import UptimeKumaMonitor
 from . import UptimeKumaDataUpdateCoordinator
 from .const import DOMAIN
 from .entity import UptimeKumaEntity
-from .utils import format_entity_name
+from .utils import format_entity_name, sensor_name_from_url
 
 
 class StatusValue(TypedDict):
@@ -59,8 +59,8 @@ async def async_setup_entry(
         [UptimeKumaSummarySensor(
             coordinator,
             SensorEntityDescription(
-                key="system_summary",
-                name="system_summary",
+                key=sensor_name_from_url(coordinator.api._base_url)+"system_summary",
+                name=sensor_name_from_url(coordinator.api._base_url)+"system_summary",
                 entity_category=EntityCategory.DIAGNOSTIC,
                 device_class="uptimekuma__monitor_status",
             )
@@ -110,7 +110,7 @@ class UptimeKumaSummarySensor(SensorEntity):
         self.downs=0
         self.pendings=0
         self.ukstate=0.0
-        self.entity_id = ("sensor.uptimekuma")
+        self.entity_id = ("sensor.uptimekuma_"+sensor_name_from_url(coordinator.api._base_url))
 
         self._attr_extra_state_attributes = {
             "monitors": len(self.coordinator.data),
