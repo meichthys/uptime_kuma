@@ -23,8 +23,9 @@ class StatusValue(TypedDict):
     icon: str
 
 SYSTEM_INFO = {
-    0.0: StatusValue(value="degraded", icon="mdi:television-off"),
-    1.0: StatusValue(value="up", icon="mdi:television-shimmer"),
+    0.0: StatusValue(value="degraded", icon="mdi:alert"),
+    1.0: StatusValue(value="up", icon="mdi:check-circle-outline"),
+    2.0: StatusValue(value="down", icon="mdi:alpha-x-circle-outline"),
 }
 
 SENSORS_INFO = {
@@ -105,21 +106,50 @@ class UptimeKumaSummarySensor(SensorEntity):
         super().__init__()
         self.description=description
         self.coordinator=coordinator
+        self.ups=0
+        self.downs=0
+        self.pendings=0
         self.ukstate=0.0
-        self.entity_id = (
-            f"sensor.uptimekuma_{format_entity_name(self.description.name)}"
-        )
+        self.entity_id = ("sensor.uptimekuma")
+
+        self._attr_extra_state_attributes = {
+            "monitors": len(self.coordinator.data),
+            "monitors_up": self.ups,
+            "monitors_down": self.downs,
+            "monitors_pending": self.pendings,
+        }
+
+    def determine_status(self):
+        for m in self.coordinator.data:
+            if m.monitor_status == 0.0:
+                self.downs+=1
+            elif m.monitor_status == 1.0:
+                self.ups+=1
+            elif m.monitor_status == 2.0:
+                self.pendings+=1
+
+        self._attr_extra_state_attributes = {
+            "monitors": len(self.coordinator.data),
+            "monitors_up": self.ups,
+            "monitors_down": self.downs,
+            "monitors_pending": self.pendings,
+        }
+
+        if self.downs==0 and self.pendings==0:
+            self.ukstate=1.0
+        elif self.ups==0 and self.pendings==0:
+            self.ukstate=2.0
+        else:
+            self.ukstate=0.0
+
+        return self.ukstate
 
     @property
     def native_value(self) -> str:
-        """Return the status of the monitor."""
-        self.ukstate=1.0
-        for m in self.coordinator.data:
-            if m.monitor_status == 0.0:
-                self.ukstate=0.0
-        return SYSTEM_INFO[self.ukstate]["value"]
+        """Return the status of the monitor."""    
+        return SYSTEM_INFO[self.determine_status()]["value"]
 
     @property
     def icon(self) -> str:
         """Return the status of the monitor."""
-        return SYSTEM_INFO[self.ukstate]["icon"]
+        return SYSTEM_INFO[self.determine_status()]["icon"]
