@@ -32,7 +32,9 @@ After installation, setup the integration via the web UI like any other integrat
 
 - Your UptimeKuma instance url (i.e. https://myuptimekuma.mydomain.com)
 - Port (Generally 443 if running behind reverse proxy)
-- Your UptimeKuma credentials (no 2FA app password required)
+- Your uptimekuma credentials
+  - NOTE: If you have issues connecting, try creating an uptimekuma API key and using that with NO username for the credentials.
+  -If you are still having issues,make sure you can successfully connect to `http(s)://your_uptimekuma.url/metrics`
 - Verify SSL (Generally checked)
 
 ## Contributions
