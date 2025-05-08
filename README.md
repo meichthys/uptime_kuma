@@ -30,15 +30,18 @@ Search for "Uptime Kuma" in the HACS store. If you don't see it there, you can [
 
 After installation, setup the integration via the web UI like any other integration. When prompted, provide the following:
 
-### HTTPS Connections:
+### HTTPS Connections
+
 - URL: Your UptimeKuma instance url (i.e. https://myuptimekuma.mydomain.com)
 - Port: (Generally 443 if running behind reverse proxy)
 - User: Your uptimekuma Username
 - Password: API Key (UptimeKuma > Settings > API Keys)
 - Verify SSL: (Generally checked)
 
-### HTTP Connections:
+### HTTP Connections
+
 - URL: Your UptimeKuma instance url (i.e. http://xxx.xxx.xxx.xxx)
+  - Note: make sure there is NO trailing slash at the end of the url
 - Port : 3001
 - User: Your uptimekuma Username
 - Password: API Key (UptimeKuma > Settings > API Keys)
