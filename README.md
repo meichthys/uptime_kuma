@@ -32,7 +32,7 @@ After installation, setup the integration via the web UI like any other integrat
 
 ### HTTPS Connections
 
-- URL: Your UptimeKuma instance url (i.e. https://myuptimekuma.mydomain.com)
+- URL: Your UptimeKuma instance url (i.e. https://myuptimekuma.mydomain.com _without_ a trailing slash)
 - Port: (Generally 443 if running behind reverse proxy)
 - User: Your uptimekuma Username
 - Password: API Key (UptimeKuma > Settings > API Keys)
