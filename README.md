@@ -1,4 +1,4 @@
-# Uptime Kuma HACS integration
+# Uptime Kuma HACS integration (*Deprecated*)
 
 > [!IMPORTANT]  
 > There is now an UptimeKuma core integration in HomeAssistant. It is recommended to migrate to that integration since I will no longer be updating this one.
