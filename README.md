@@ -1,5 +1,13 @@
 # Uptime Kuma HACS integration
 
+> [!IMPORTANT]  
+> There is now an UptimeKuma core integration in HomeAssistant. It is recommended to migrate to that integration since I will no longer be updating this one.
+>
+> I'm nore than glad to retire the project as it did take a reasonable amount of time and continuous support for non-technical users.
+> If you would like to drop a token of appreciation, you can do so [here](https://liberapay.com/meichthys/donate).
+>  
+> For details on switching to the core integration, [see comment](https://github.com/meichthys/uptime_kuma/issues/132#issuecomment-3186001510).
+
 ## About
 
 This integration exposes UptimeKuma monitors in HomeAssistant. Two sensors are created for each UptimeKuma monitor:
